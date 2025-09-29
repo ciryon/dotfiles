@@ -1,0 +1,9 @@
+if [[ "$(uname -s)" == "Linux" ]] && [[ -r ~/.local/share/omarchy/default/bash/rc ]]; then
+  source ~/.local/share/omarchy/default/bash/rc
+fi
+
+set -h
+
+# Exports
+export DEVOPS_EVENTS_DIR="/home/ciryon/Coding/PulsSolutions/services/devops-events-service" # should move elsewhere
+export PATH="$HOME/Coding/PulsSolutions/scripts/bin:$PATH"

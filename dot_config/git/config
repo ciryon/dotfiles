@@ -1,0 +1,12 @@
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[pull]
+	rebase = true
+[init]
+	defaultBranch = master
+[user]
+	name = Christian Hedin
+	email = christian.hedin@puls-solutions.se

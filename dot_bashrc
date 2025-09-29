@@ -1,0 +1,6 @@
+# Glob all files in ~/.config/bash/
+shopt -s nullglob
+for f in "$HOME"/.config/bash/*.sh; do
+  [[ -r "$f" ]] && source "$f"
+done
+shopt -u nullglob
