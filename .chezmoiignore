@@ -14,3 +14,4 @@ Library/
 .config/Signal/
 .config/spotify/
 .config/JetBrains/
+.config/nvim/lazy-lock.json
