@@ -1,2 +1,4 @@
 set visualbell
 source ~/.vimrc
+set norelativenumber
+set number

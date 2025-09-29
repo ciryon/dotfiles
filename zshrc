@@ -49,13 +49,14 @@ include $ZSH/oh-my-zsh.sh
 setopt noautomenu
 setopt nomenucomplete
 
-export ANDROID_HOME=/Users/$USER/Library/Android/sdk
 
 # export MANPATH="/usr/local/man:$MANPATH"
 export AWS_CONFIG_FILE=~/.aws/config
 
+export AWS_PAGER=""
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL="en_US.UTF-8"
 
 # Dont use universal history
 unsetopt inc_append_history
@@ -73,7 +74,7 @@ alias is='cd ~/Coding/Istari && asp istari && echo Istari'
 alias t='tmux'
 alias yesterday='~/Coding/misc_scripts/yesterday.rb'
 alias grep='grep --color=auto'
-alias serve='python3 -m http.server'
+#alias serve='python3 -m http.server'
 alias r='rails'
 alias subs='echo "Recursively updating Git submodules..."; git submodule update --init --recursive'
 alias pico=vim
@@ -94,7 +95,9 @@ alias top=htop # custom top variant https://htop.dev/
 alias man=tldr # custom man pages 
 alias pino-pretty='pino-pretty -i hostname,pid -S -t "SYS:yyyy-mm-dd HH:MM:ss"' # hide hostname,pid + single line + timestamp 
 alias logs=puls_aws_logs
-
+alias serve='npx serve'
+alias grepo='open "https://github.com/$(git config --get remote.origin.url \
+| sed -E "s#.*github.com[:/]##;s/\.git$//")"'
 # Pager with nice colors
 export PAGER="most"
 
@@ -108,12 +111,28 @@ SECRETS=~/.secrets && test -f $SECRETS && source $SECRETS
 include ~/.rvm/scripts/rvm
 
 
+export XDG_CONFIG_HOME="$HOME/.config"
+
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH=/usr/local/bin:/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:$RUBY_GEM_BIN:~/bin:$HOME/Coding/misc_scripts:$HOME/Coding/Istari/AWS/scripts:$HOME/dev/flutter/.pub-cache/bin:$HOME/dev/flutter/bin:$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:/opt/metasploit-framework/bin:$HOME/Coding/PulsSolutions/scripts/bin
+
+if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+  export PATH=/opt/homebrew/opt/ruby/bin:$PATH
+  export PATH=`gem environment gemdir`/bin:$PATH
+fi
+
+# Android
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+export ANDROID_HOME=$ANDROID_SDK_ROOT
+export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+export CHROME_EXECUTABLE="/Applications/Arc.app/Contents/MacOS/Arc"
+
 
 if [[ -n $AWS_EXECUTION_ENV ]]; then
   # AWS CloudConsole
@@ -134,3 +153,18 @@ include ~/.fzf.zsh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+
+# bun completions
+[ -s "/Users/ciryon/.bun/_bun" ] && source "/Users/ciryon/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# check for .nvmrc when cd:ing
+cd() {
+  builtin cd "$@"
+  if [ -f ".nvmrc" ]; then
+     nvm use
+  fi
+}

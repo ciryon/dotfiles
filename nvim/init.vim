@@ -59,7 +59,10 @@ endif
 
 "Leader
 
-let mapleader=","
+"let mapleader=","
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+
 
 " Color scheme
 

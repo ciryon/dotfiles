@@ -20,7 +20,7 @@
   fontui = -family Helvetica -size 14 -weight normal -slant roman -underline 0 -overstrike 0
   fontdiff = -family Monaco -size 11 -weight normal -slant roman -underline 0 -overstrike 0
 [core]
-  editor = vim
+  editor = nvim
   pager = diff-so-fancy | less --tabs=1,5 -R
 	excludesfile = /Users/ciryon/.gitignore_global
 [web]
