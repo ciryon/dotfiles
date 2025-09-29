@@ -1,0 +1,18 @@
+# never track secrets
+private_dot_ssh/*
+private_dot_gnupg/*
+.secrets
+
+# OS / app noise
+.cache/
+.local/
+Library/
+.config/1Password/
+.config/raycast/
+.config/iterm2/
+.config/BraveSoftware/
+.config/chromium*/
+.config/google-chrome*/
+.config/microsoft-edge-dev/
+.config/vivaldi*/
+
