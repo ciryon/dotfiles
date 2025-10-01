@@ -2,7 +2,7 @@ if [[ "$(uname -s)" == "Linux" ]] && [[ -r ~/.local/share/omarchy/default/bash/r
   source ~/.local/share/omarchy/default/bash/rc
 fi
 
-set -h
+set -o vi
 
 # Exports
 export DEVOPS_EVENTS_DIR="/home/ciryon/Coding/PulsSolutions/services/devops-events-service" # should move elsewhere
@@ -20,3 +20,6 @@ eval "$(direnv hook bash)"
 
 # atuin history
 eval "$(atuin init bash --disable-up-arrow)"
+
+# carapace completions
+source <(carapace _carapace)
