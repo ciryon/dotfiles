@@ -1,7 +1,7 @@
 [general]
 
 import = [ "~/.config/omarchy/current/theme/alacritty.toml" ]
-working_directory = "/"
+#working_directory = "/"
 
 [env]
 TERM = "xterm-256color"
