@@ -7,6 +7,9 @@ set -h
 # Direnv
 eval "$(direnv hook bash)"
 
+# atuin history
+eval "$(atuin init bash --disable-up-arrow)"
+
 # Exports
 export DEVOPS_EVENTS_DIR="/home/ciryon/Coding/PulsSolutions/services/devops-events-service" # should move elsewhere
 export PATH="$HOME/Coding/PulsSolutions/scripts/bin:$PATH"
