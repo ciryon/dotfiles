@@ -59,5 +59,11 @@ path_display() {
 c_reset='\[\e[0m\]'
 c_lblue='\[\e[36m\]'
 
+# Bash completions
+#
+if [ -f /opt/homebrew/etc/bash_completion ]; then
+  . /opt/homebrew/etc/bash_completion
+fi
+
 # Prompt: [path] >
 PS1="${c_lblue}[\$(path_display)] >${c_reset} "
