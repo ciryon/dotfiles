@@ -17,9 +17,3 @@ esac
 
 # Direnv
 eval "$(direnv hook bash)"
-
-# atuin history
-eval "$(atuin init bash --disable-up-arrow)"
-
-# carapace completions
-source <(carapace _carapace)
