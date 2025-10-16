@@ -21,6 +21,8 @@ fi
 alias cat='bat --paging=never --style=plain 2>/dev/null'
 alias grep='grep --color=auto'
 
+alias n=nvim
+
 path_display() {
   local p="$PWD" home="$HOME" ell="…"
 
