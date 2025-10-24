@@ -4,7 +4,7 @@
 # ----- readable, colorful ls -----
 # Prefer eza if available (nicer icons, columns, git, etc)
 if command -v eza >/dev/null 2>&1; then
-  alias ls='eza --group --header --time-style=long-iso'
+  alias ls='eza -al --group --header --time-style=long-iso'
   alias ll='eza -l --group --header --git --time-style=long-iso'
   alias la='eza -la --group --header --git --time-style=long-iso'
 else
@@ -20,6 +20,9 @@ fi
 # ----- a couple of tasteful QoL aliases -----
 alias cat='bat --paging=never --style=plain 2>/dev/null'
 alias grep='grep --color=auto'
+
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
 path_display() {
   local p="$PWD" home="$HOME" ell="…"
