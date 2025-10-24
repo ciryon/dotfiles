@@ -1,0 +1,9 @@
+# carapace completions
+export CARAPACE_EXCLUDES='node,npx'
+source <(carapace _carapace)
+#
+# atuin history
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash --disable-up-arrow)"
+
+echo "Remember to use 'zi' to jump to dirs and 'zellij' to start terminal multiplexer!"

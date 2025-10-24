@@ -21,15 +21,6 @@ fi
 alias cat='bat --paging=never --style=plain 2>/dev/null'
 alias grep='grep --color=auto'
 
-alias n=nvim
-
-# Locale
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
-# JAVA_HOME
-export JAVA_HOME="/Applications/Android\ Studio.app/Contents/jbr/Contents/Home"
-
 path_display() {
   local p="$PWD" home="$HOME" ell="…"
 
