@@ -1,3 +1,6 @@
+# If not running interactively, don't do anything (leave this at the top of this file)
+[[ $- != *i* ]] && return
+
 # Glob all files in ~/.config/bash/
 shopt -s nullglob
 for f in "$HOME"/.config/bash/*.sh; do
