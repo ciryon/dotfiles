@@ -18,7 +18,6 @@ else
 fi
 
 # ----- a couple of tasteful QoL aliases -----
-alias cat='bat --paging=never --style=plain --theme="gruvbox-dark" 2>/dev/null'
 alias grep='grep --color=auto'
 alias n=nvim
 

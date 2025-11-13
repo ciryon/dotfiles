@@ -7,4 +7,5 @@ alias lg=lazygit
 alias logs=puls_aws_logs
 alias js='cd ~/Coding/JavaScript'
 alias is='cd ~/Coding/Istari'
+alias cat='bat --paging=never --style=plain --theme="gruvbox-dark" 2>/dev/null'
 alias hurrah="echo \"Hurrah!\""
