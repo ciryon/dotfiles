@@ -16,6 +16,7 @@
   vdiff = diff
 	dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy  | less --tabs=4 -RFX; }; f"
   change-commits = "!f() { VAR=$1; OLD=$2; NEW=$3; shift 3; git filter-branch --env-filter \"if [[ \\\"$`echo $VAR`\\\" = '$OLD' ]]; then export $VAR='$NEW'; fi\" $@; }; f "
+  cleanup-gone = !git fetch --prune && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D
 [core]
   editor = nvim
   pager = diff-so-fancy | less --tabs=1,5 -R
