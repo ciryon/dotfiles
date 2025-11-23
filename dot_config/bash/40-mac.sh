@@ -72,3 +72,6 @@ fi
 
 # Prompt: [path] >
 PS1="${c_lblue}[\$(path_display)] >${c_reset} "
+
+# Zoxide
+eval "$(zoxide init bash)"
