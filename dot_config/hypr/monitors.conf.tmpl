@@ -11,20 +11,22 @@
 # env = GDK_SCALE,1.75
 # monitor=,preferred,auto,1.666667
 
+{{ if eq .chezmoi.hostname "omarchy" }}
 # Straight 1x setup for low-resolution displays like 1080p or 1440p
 
 env = GDK_SCALE,1
 
+# Left – Dell 24"
+monitor = desc:Dell Inc. DELL P2419HC,1920x1080@60,-1920x0,1
 
-# Center – Philips 32" (DP-4)
-monitor=DP-4,2560x1440@59.95,0x0,1
+# Center – Philips 32"
+monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,0x0,1
 
-# Left – Dell 24" (DP-3)
-monitor=DP-3,1920x1080@60,-1920x0,1
+# Right – Philips 27" rotated (portrait)
+# Note: when rotated, width/height swap, so its "effective width" is 1440 for placement.
+monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,2560x-580,1,transform,1
 
-# Right – Philips 27" rotated (HDMI-A-1)
-monitor=HDMI-A-1,1920x1080@60,2560x0,1,transform,1
-
-# Example for Framework 13 w/ 6K XDR Apple display
-# monitor = DP-5, 6016x3384@60, auto, 2
-# monitor = eDP-1, 2880x1920@120, auto, 2
+{{ end }}
+#
+# Fallback for anything else
+monitor = ,preferred,auto,1
