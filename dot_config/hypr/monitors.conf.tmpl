@@ -1,18 +1,5 @@
-# See https://wiki.hyprland.org/Configuring/Monitors/
-# List current monitors and resolutions possible: hyprctl monitors
-# Format: monitor = [port], resolution, position, scale
-# You must relaunch Hyprland after changing any envs (use Super+Esc, then Relaunch)
-
-# Optimized for retina-class 2x displays, like 13" 2.8K, 27" 5K, 32" 6K.
-# env = GDK_SCALE,2
-# monitor=,preferred,auto,auto
-
-# Good compromise for 27" or 32" 4K monitors (but fractional!)
-# env = GDK_SCALE,1.75
-# monitor=,preferred,auto,1.666667
-
-{{ if eq .chezmoi.hostname "omarchy" }}
-# Straight 1x setup for low-resolution displays like 1080p or 1440p
+{{- if eq .chezmoi.hostname "omarchy" -}}
+# Home desktop Omarchy PC
 
 env = GDK_SCALE,1
 
@@ -23,11 +10,58 @@ monitor = desc:Dell Inc. DELL P2419HC,1920x1080@60,-1920x0,1
 monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,0x0,1
 
 # Right – Philips 27" rotated (portrait)
-# Note: when rotated, width/height swap, so its "effective width" is 1440 for placement.
 monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,2560x-580,1,transform,1
 
-{{ end }}
+{{- else if eq .chezmoi.hostname "omarchy-framework-13" -}}
+# Omarchy Framework 13" laptop
 
-# Fallback for anything else
+{{- $monitors := (output "chezmoi-detect-monitors" | fromJson) -}}
+
+{{- if eq (len $monitors) 4 -}}
+# Custom config for 3 external displays + internal
+
 env = GDK_SCALE,2
-monitor=,preferred,auto,auto
+
+# Internal display
+monitor = desc:BOE NE135A1M-NY1,preferred,-1440x800,2
+
+# Left – Dell 24"
+monitor = desc:Dell Inc. DELL P2419HC,1920x1080@60,-1920x0,1
+
+# Center – Philips 32"
+monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,0x0,1
+
+# Right – Philips 27" rotated (portrait)
+monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,2560x-580,1,transform,1
+
+{{- end -}}
+
+{{- if eq (len $monitors) 3 -}}
+# Custom config for 2 external displays + internal (not connecting left Dell)
+
+env = GDK_SCALE,2
+
+# Internal display
+monitor = desc:BOE NE135A1M-NY1,preferred,-1440x800,2
+
+# Center – Philips 32"
+monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,0x0,1
+
+# Right – Philips 27" rotated (portrait)
+monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,2560x-580,1,transform,1
+
+{{- end -}}
+
+{{- if eq (len $monitors) 1 -}}
+# Default config: internal + whatever else (Hyprland auto placement)
+
+env = GDK_SCALE,2
+monitor = ,preferred,auto,auto
+{{- end -}}
+
+{{- else -}}
+# Generic fallback for non-configured machines
+env = GDK_SCALE,2
+monitor = ,preferred,auto,auto
+{{- end -}}
+
