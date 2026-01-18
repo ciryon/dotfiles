@@ -6,6 +6,6 @@ source <(carapace _carapace)
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash --disable-up-arrow)"
 
-{{ if eq .chezmoi.hostname "omarchy" }}
+{{ if (contains "omarchy" .chezmoi.hostname) }}
 echo "Remember: 'zi' for  cd, 'zellij' for terminal multiplexer - and yazi for file manager!"
 {{ end }}
