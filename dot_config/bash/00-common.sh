@@ -15,5 +15,12 @@ Darwin)
   ;;
 esac
 
+case "$(uname -s)" in
+Linux)
+  export CAPACITOR_ANDROID_STUDIO_PATH="/usr/bin/android-studio"
+  ;;
+esac
+
+
 # Direnv
 eval "$(direnv hook bash)"
