@@ -17,8 +17,8 @@ monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,25
 
 {{- $monitors := (output "chezmoi-detect-monitors" | fromJson) -}}
 
-{{- if eq (len $monitors) 4 -}}
-# Custom config for 3 external displays + internal
+{{- if eq (len $monitors) 100 -}}
+# Custom config for 3 external displays + internal (DISABLED!)
 
 env = GDK_SCALE,2
 
@@ -42,13 +42,13 @@ monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,25
 env = GDK_SCALE,2
 
 # Internal display
-monitor = desc:BOE NE135A1M-NY1,preferred,-1440x800,2
+monitor = desc:BOE NE135A1M-NY1,preferred,auto,2
 
 # Center – Philips 32"
-monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,0x0,1
+monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,auto,1
 
 # Right – Philips 27" rotated (portrait)
-monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,2560x-580,1,transform,1
+monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,auto,1,transform,1
 
 {{- end -}}
 
