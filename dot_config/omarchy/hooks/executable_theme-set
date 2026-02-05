@@ -1,0 +1,125 @@
+#!/bin/bash
+
+# This hook is called with the snake-cased name of the theme that has just been set.
+
+THEME_NAME="$1"
+ROOM_NAME="Office"
+DEFAULT_BRIGHTNESS=80
+CURRENT_BACKGROUND_LINK="$HOME/.config/omarchy/current/background"
+COLORS_FILE="$HOME/.config/omarchy/current/theme/colors.toml"
+
+get_hex_from_image() {
+  local image_path=$1
+  local pixel
+
+  pixel=$(magick "$image_path" -resize 1x1! -colorspace sRGB -depth 8 -format "%[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)]" info: 2>/dev/null) || return 1
+
+  if [[ $pixel =~ ^([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})$ ]]; then
+    local r=${BASH_REMATCH[1]}
+    local g=${BASH_REMATCH[2]}
+    local b=${BASH_REMATCH[3]}
+    printf "#%02x%02x%02x" "$r" "$g" "$b"
+    return 0
+  fi
+
+  return 1
+}
+
+get_hex_from_colors() {
+  local colors_file=$1
+  local accent
+
+  [[ -f "$colors_file" ]] || return 1
+  accent=$(awk -F '"' '/^accent =/ {print $2; exit}' "$colors_file")
+
+  if [[ -n $accent ]]; then
+    if [[ $accent != \#* ]]; then
+      accent="#${accent}"
+    fi
+    printf "%s" "$accent"
+    return 0
+  fi
+
+  return 1
+}
+
+hex_to_rgb() {
+  local hex=${1#\#}
+  local r=${hex:0:2}
+  local g=${hex:2:2}
+  local b=${hex:4:2}
+
+  printf "%d %d %d" "0x$r" "0x$g" "0x$b"
+}
+
+brightness_for_color() {
+  local hex=$1
+  local r g b
+  local max
+  local saturation
+
+  read -r r g b < <(hex_to_rgb "$hex")
+  max=$r
+  (( g > max )) && max=$g
+  (( b > max )) && max=$b
+
+  if (( max >= 245 )); then
+    echo 50
+    return 0
+  fi
+
+  if (( max >= 200 )); then
+    saturation=$(( max - (r + g + b - max) / 2 ))
+    if (( saturation <= 40 )); then
+      echo 50
+      return 0
+    fi
+  fi
+
+  if (( r >= 150 && g <= 90 && b <= 90 )); then
+    echo 100
+    return 0
+  fi
+
+  if (( r >= 120 && b >= 120 && g <= 110 )); then
+    echo 80
+    return 0
+  fi
+
+  echo "$DEFAULT_BRIGHTNESS"
+}
+
+if ! command -v openhue >/dev/null 2>&1; then
+  notify-send "New theme" "Your new theme is $THEME_NAME (openhue missing)"
+  exit 0
+fi
+
+hex_color=""
+
+if command -v magick >/dev/null 2>&1; then
+  image_path=""
+  if [[ -L "$CURRENT_BACKGROUND_LINK" ]]; then
+    image_path=$(readlink -f "$CURRENT_BACKGROUND_LINK" 2>/dev/null)
+  elif [[ -f "$CURRENT_BACKGROUND_LINK" ]]; then
+    image_path="$CURRENT_BACKGROUND_LINK"
+  fi
+
+  if [[ -n $image_path && -f $image_path ]]; then
+    hex_color=$(get_hex_from_image "$image_path")
+  fi
+fi
+
+if [[ -z $hex_color ]]; then
+  hex_color=$(get_hex_from_colors "$COLORS_FILE")
+fi
+
+if [[ -n $hex_color ]]; then
+  brightness=$(brightness_for_color "$hex_color")
+  if openhue set room "$ROOM_NAME" --on --rgb "$hex_color" --brightness "$brightness" >/dev/null 2>&1; then
+    notify-send "New theme" "Your new theme is $THEME_NAME (Hue: $hex_color @ ${brightness}%)"
+  else
+    notify-send "New theme" "Your new theme is $THEME_NAME (Hue update failed)"
+  fi
+else
+  notify-send "New theme" "Your new theme is $THEME_NAME (no color found)"
+fi
