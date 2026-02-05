@@ -12,15 +12,21 @@ case "$(uname -s)" in
 Darwin)
   HOMEBREW_PREFIX="/opt/homebrew"
   export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+  # Mise
+  eval "$(/usr/bin/mise activate bash)"
   ;;
 esac
 
 case "$(uname -s)" in
 Linux)
   export CAPACITOR_ANDROID_STUDIO_PATH="/usr/bin/android-studio"
+  # Mise
+  eval "$(/usr/bin/mise activate bash)"
   ;;
 esac
 
+export CLOUDFLARED_USERNAME=christian
 
 # Direnv
-eval "$(direnv hook bash)"
+# eval "$(direnv hook bash)"
+
