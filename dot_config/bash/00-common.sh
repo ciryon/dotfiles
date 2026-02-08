@@ -13,7 +13,7 @@ Darwin)
   HOMEBREW_PREFIX="/opt/homebrew"
   export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
   # Mise
-  eval "$(/usr/bin/mise activate bash)"
+  eval "$(~/.local/bin/mise activate bash)"
   ;;
 esac
 
@@ -29,4 +29,3 @@ export CLOUDFLARED_USERNAME=christian
 
 # Direnv
 # eval "$(direnv hook bash)"
-
