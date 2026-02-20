@@ -12,7 +12,7 @@ monitor = desc:Philips Consumer Electronics Company PHL 325E1,2560x1440@59.95,0x
 # Right – Philips 27" rotated (portrait)
 monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,2560x-580,1,transform,1
 
-{{- else if eq .chezmoi.hostname "omarchy-framework-13" -}}
+{{- else if eq .chezmoi.hostname "telchar" -}}
 # Omarchy Framework 13" laptop
 
 {{- $monitors := (output "chezmoi-detect-monitors" | fromJson) -}}
