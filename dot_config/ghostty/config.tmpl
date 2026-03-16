@@ -1,7 +1,10 @@
-{{ if (contains "omarchy" .chezmoi.hostname) }}
+{{ if eq .chezmoi.os "linux" }}
+
+
 # Dynamic theme colors
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 
+{{ end }}
 
 
 # Font
@@ -12,7 +15,7 @@ font-size = 10
 
 # Mouse scroll adjust
 mouse-scroll-multiplier = 1.3
-{{ end }}
+
 
 # Window
 window-padding-x = 14
@@ -35,6 +38,11 @@ keybind = super+control+shift+alt+arrow_left=resize_split:left,100
 keybind = super+control+shift+alt+arrow_right=resize_split:right,100
 
 
+
+
+
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll
 
 {{ if eq .chezmoi.os "darwin" }}
 keybind = shift+insert=paste_from_clipboard

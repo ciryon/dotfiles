@@ -7,5 +7,19 @@ alias lg=lazygit
 alias logs=puls_aws_logs
 alias js='cd ~/Coding/JavaScript'
 alias is='cd ~/Coding/Istari'
-alias cat='bat --paging=never --style=plain --theme="gruvbox-dark" 2>/dev/null'
+cat() {
+  if [[ $# -eq 0 ]]; then
+    command bat --paging=never --style=plain --theme=gruvbox-dark 2>/dev/null
+    return
+  fi
+
+  for f in "$@"; do
+    if [[ -f "$f" ]] && file --mime-type -b "$f" | grep -q '^image/'; then
+      kitten icat "$f"
+    else
+      command bat --paging=never --style=plain --theme=gruvbox-dark 2>/dev/null "$f"
+    fi
+  done
+}
+
 alias hurrah="echo \"Hurrah!\""
