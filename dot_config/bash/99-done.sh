@@ -1,10 +1,15 @@
 # carapace completions
-export CARAPACE_EXCLUDES='node,npx'
-source <(carapace _carapace)
-#
+if command -v carapace >/dev/null 2>&1; then
+  export CARAPACE_EXCLUDES='node,npx'
+  source <(carapace _carapace)
+fi
+
 # atuin history
-[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
-eval "$(atuin init bash --disable-up-arrow)"
+[[ -r ~/.atuin/bin/env ]] && source ~/.atuin/bin/env
+if command -v atuin >/dev/null 2>&1; then
+  [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+  eval "$(atuin init bash --disable-up-arrow)"
+fi
 
 
 # A fun pic (only on host telchar)
