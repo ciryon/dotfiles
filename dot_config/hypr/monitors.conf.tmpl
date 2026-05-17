@@ -15,7 +15,7 @@ monitor = desc:Philips Consumer Electronics Company PHL 275E1,2560x1440@59.95,25
 {{- else if eq .chezmoi.hostname "telchar" -}}
 # Omarchy Framework 13" laptop
 
-{{- $monitors := (output "chezmoi-detect-monitors" | fromJson) -}}
+{{ $monitors := (output "chezmoi-detect-monitors" | fromJson) -}}
 
 {{- if eq (len $monitors) 100 -}}
 # Custom config for 3 external displays + internal (DISABLED!)
@@ -68,4 +68,3 @@ monitor = desc:LG Electronics LG TV SSCR2,3840x2160@30,auto,2
 env = GDK_SCALE,2
 monitor = ,preferred,auto,auto
 {{- end -}}
-
