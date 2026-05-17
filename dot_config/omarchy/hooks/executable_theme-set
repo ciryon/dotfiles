@@ -7,6 +7,27 @@ ROOM_NAME="Office"
 DEFAULT_BRIGHTNESS=80
 CURRENT_BACKGROUND_LINK="$HOME/.config/omarchy/current/background"
 COLORS_FILE="$HOME/.config/omarchy/current/theme/colors.toml"
+CLIAMP_CONFIG="$HOME/.config/cliamp/config.toml"
+
+update_cliamp_theme() {
+  local theme_name=$1
+
+  [[ -f $CLIAMP_CONFIG ]] || return 0
+  command -v cliamp >/dev/null 2>&1 || return 0
+
+  if ! cliamp theme list 2>/dev/null | awk '{$1=$1};1' | grep -Fxq "$theme_name"; then
+    notify-send "New theme" "cliamp has no '$theme_name' theme; keeping current cliamp theme"
+    return 0
+  fi
+
+  if grep -q '^theme = ' "$CLIAMP_CONFIG"; then
+    sed -i "s/^theme = .*/theme = \"$theme_name\"/" "$CLIAMP_CONFIG"
+  else
+    sed -i "1itheme = \"$theme_name\"" "$CLIAMP_CONFIG"
+  fi
+
+  cliamp theme "$theme_name" >/dev/null 2>&1 || true
+}
 
 get_hex_from_image() {
   local image_path=$1
@@ -88,6 +109,8 @@ brightness_for_color() {
 
   echo "$DEFAULT_BRIGHTNESS"
 }
+
+update_cliamp_theme "$THEME_NAME"
 
 if ! command -v openhue >/dev/null 2>&1; then
   notify-send "New theme" "Your new theme is $THEME_NAME (openhue missing)"
