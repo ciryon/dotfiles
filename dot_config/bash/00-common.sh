@@ -12,18 +12,12 @@ case "$(uname -s)" in
 Darwin)
   HOMEBREW_PREFIX="/opt/homebrew"
   export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
-  # Mise
-  eval "$(~/.local/bin/mise activate bash)"
   ;;
 esac
 
 case "$(uname -s)" in
 Linux)
   export CAPACITOR_ANDROID_STUDIO_PATH="/usr/bin/android-studio"
-  # Mise
-  if command -v mise >/dev/null 2>&1; then
-    eval "$(mise activate bash)"
-  fi
   ;;
 esac
 
