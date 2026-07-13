@@ -113,8 +113,13 @@ key = "prefix+ctrl+t"                 # tmux C-t shell
 type = "pane"
 command = "$SHELL"
 
-# NOTE: tmux C-j zoxide-jump has no herdr equivalent — a herdr command pane
-# cannot cd the source pane's shell. Replaced by a bash Ctrl-o widget in ~/.bashrc.
+# tmux C-j zoxide-jump has no herdr equivalent — a herdr command pane cannot cd
+# the source pane's shell. Replaced by a bash Ctrl-o widget (~/.bashrc).
+# Keep the old chord as a reminder that points to the new key.
+[[keys.command]]
+key = "prefix+ctrl+j"
+type = "pane"
+command = "bash -c 'printf \"\\n  Dir-jump moved: use Ctrl-o instead!\\n\\n  (press any key)\\n\"; read -rsn1'"
 
 [keys.indexed]
 tabs = "alt"        # alt+1..9 switch tabs directly (tmux M-1..9)
