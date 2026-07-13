@@ -73,14 +73,14 @@ reload_config = "prefix+q"          # tmux: bind q source-file
 # new_worktree = "prefix+shift+g"
 
 # Workspaces == tmux sessions
-rename_workspace = "prefix+shift+r"   # tmux R
+rename_workspace = "prefix+$"         # tmux default prefix+$
 close_workspace = "prefix+shift+k"    # tmux K
 previous_workspace = "alt+up"         # tmux M-Up / P
 next_workspace = "alt+down"           # tmux M-Down / N
 
 # Tabs == tmux windows
 new_tab = "prefix+c"                  # tmux c
-rename_tab = "prefix+r"               # tmux r
+rename_tab = "prefix+comma"           # tmux default prefix+,
 close_tab = "prefix+k"                # tmux k
 previous_tab = "alt+left"             # tmux M-Left
 next_tab = "alt+right"                # tmux M-Right
@@ -99,7 +99,7 @@ split_vertical = "prefix+v"           # tmux v: side-by-side
 split_horizontal = "prefix+h"         # tmux h: stacked
 close_pane = "prefix+x"               # tmux x
 zoom = "prefix+z"
-resize_mode = "prefix+ctrl+r"         # freed prefix+r for rename_tab
+resize_mode = "prefix+r"              # herdr default (prefix+r freed by comma rename)
 # toggle_sidebar = "prefix+b"
 
 # Custom command popups (tmux popup bindings in tmux_ciryon.conf)
