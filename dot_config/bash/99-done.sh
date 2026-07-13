@@ -35,4 +35,4 @@ EOF
 fi
 
 
-echo "Remember: 'tdl c' for tmux work session with AI, gh dash - and yazi for file manager!"
+echo "Remember: 'herdr' for tmux work session with AI, ctrl-o to jump to dir, gh dash - and yazi for file manager!"
