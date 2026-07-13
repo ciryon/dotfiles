@@ -39,3 +39,34 @@ tdl ()
     tmux select-pane -t "$editor_pane"
 }
 
+
+# Zoxide dir jump widget (multiplexer-independent; replaces tmux popup C-j).
+# cd happens in THIS shell via bind -x, so it works under herdr, tmux, or bare terminal.
+# Print `cd <dir>` (does not cd itself). The keybinding expands and runs it,
+# so the dynamic prompt refreshes and the visible command is a clean `cd /path`.
+__zjump_cmd() {
+  local dir
+  dir="$(
+    zoxide query -l \
+    | while IFS= read -r d; do
+        git -C "$d" rev-parse --show-toplevel 2>/dev/null || printf '%s\n' "$d"
+      done \
+    | awk '!seen[$0]++' \
+    | tv --source-command='cat' --source-display='{}' --source-output='{}' \
+         --no-remote --no-help-panel \
+         --input-header='Jump to directory' --input-prompt='zoxide> ' \
+         --preview-command='eza --color=always --icons=always -la {}' \
+         --preview-header='{}' --preview-border=rounded \
+         --results-border=rounded --input-border=rounded
+  )" || return 0
+  [ -n "$dir" ] && printf 'cd %q' "$dir"
+}
+# emacs keymap: clear line, insert `__zjump_cmd` substitution, shell-expand it
+# in place (runs the picker, replaces line with `cd /path`), then accept-line.
+bind -m emacs-standard '"\C-o": "\C-e\C-u`__zjump_cmd`\e\C-e\C-m"'
+# vi mode (~/.inputrc: set editing-mode vi): toggle to emacs, run, toggle back.
+bind -m emacs-standard '"\C-z": vi-editing-mode'
+bind -m vi-command '"\C-z": emacs-editing-mode'
+bind -m vi-insert  '"\C-z": emacs-editing-mode'
+bind -m vi-command '"\C-o": "\C-z\C-o\C-z"'
+bind -m vi-insert  '"\C-o": "\C-z\C-o\C-z"'
