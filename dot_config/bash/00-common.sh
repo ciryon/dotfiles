@@ -6,7 +6,8 @@ set -o vi
 
 # Exports
 export DEVOPS_EVENTS_DIR="/home/ciryon/Coding/PulsSolutions/services/devops-events-service" # should move elsewhere
-export PATH="$HOME/Coding/PulsSolutions/scripts/bin:$PATH:$HOME/bin:$HOME/.local/bin"
+export PULS_AI_TOOLS_DIR="$HOME/Coding/PulsSolutions/puls-ai-tools"
+export PATH="$HOME/Coding/PulsSolutions/scripts/bin:$PULS_AI_TOOLS_DIR/agent-personas/bin:$PATH:$HOME/bin:$HOME/.local/bin"
 
 case "$(uname -s)" in
 Darwin)
