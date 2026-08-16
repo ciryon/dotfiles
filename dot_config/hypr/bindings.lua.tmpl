@@ -1,0 +1,70 @@
+-- Personal keybindings.
+--
+-- Omarchy's defaults are loaded before this file, so any key that Omarchy
+-- already binds must be released with hl.unbind before it can be reused.
+-- Bindings that merely repeated an Omarchy default were dropped during the
+-- 4.0 port; only genuine differences live here.
+
+local home = os.getenv("HOME")
+
+-- Terminal ------------------------------------------------------------------
+
+-- Omarchy default: `tmux attach || tmux new -s Work`. Plain `tmux new` is a
+-- placeholder until a proper session-layout startup script exists.
+hl.unbind("SUPER + ALT + RETURN")
+o.bind("SUPER + ALT + RETURN", "Tmux", 'omarchy-launch-terminal bash -c "tmux new"')
+
+-- Applications --------------------------------------------------------------
+
+-- Was: Docker (lazydocker)
+hl.unbind("SUPER + SHIFT + D")
+o.bind(
+  "SUPER + SHIFT + D",
+  "Discord",
+  { webapp = "https://discord.com/channels/{{ .discord_channel }}" }
+)
+
+-- Was: Email. Prefer the aerc TUI over a webapp.
+hl.unbind("SUPER + SHIFT + E")
+o.bind("SUPER + SHIFT + E", "Email", { tui = "aerc", focus = true })
+
+-- Was: New email
+hl.unbind("SUPER + SHIFT + ALT + E")
+o.bind("SUPER + SHIFT + ALT + E", "Gmail", { webapp = "https://gmail.com" })
+
+-- Was: Calendar (HEY calendar, unused)
+hl.unbind("SUPER + SHIFT + C")
+o.bind("SUPER + SHIFT + C", "Basecamp", { webapp = "https://3.basecamp.com/{{ .basecamp_account }}" })
+
+-- Was: Signal
+hl.unbind("SUPER + SHIFT + G")
+o.bind("SUPER + SHIFT + G", "GitHub", {
+  webapp = "https://github.com/pulls?q=is%3Aopen+is%3Apr+archived%3Afalse+org%3Apulssolutions",
+})
+
+-- Was: Google Maps
+hl.unbind("SUPER + SHIFT + S")
+o.bind("SUPER + SHIFT + S", "Sprint Backlog", {
+  webapp = "https://github.com/orgs/pulssolutions/projects/1",
+})
+
+-- Was: YouTube as an Omarchy webapp. Use the separate personal Chromium
+-- profile so it runs signed in to the personal Google account.
+hl.unbind("SUPER + SHIFT + Y")
+o.bind(
+  "SUPER + SHIFT + Y",
+  "YouTube",
+  'uwsm-app -- /usr/bin/chromium --user-data-dir="'
+    .. home
+    .. '/.config/chromium-personal" --new-window "https://youtube.com/"'
+)
+
+-- Activity monitor. Omarchy also binds this to SUPER + CTRL + T.
+o.bind("SUPER + SHIFT + T", "Activity", { tui = "btop" })
+
+-- Mouse ---------------------------------------------------------------------
+
+-- MX Master 3S thumb buttons, SUPER-guarded so browser back/forward still
+-- works unmodified.
+o.bind("SUPER + mouse:275", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
+o.bind("SUPER + mouse:276", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
