@@ -9,10 +9,13 @@ local home = os.getenv("HOME")
 
 -- Terminal ------------------------------------------------------------------
 
--- Omarchy default: `tmux attach || tmux new -s Work`. Plain `tmux new` is a
--- placeholder until a proper session-layout startup script exists.
+-- Omarchy default is `tmux attach || tmux new -s Work`, which reattaches to an
+-- existing session. tmux-session-start instead always creates a new one, named
+-- "Puls <weekday>" for the first of the day and "Personal", "Personal 2", ...
+-- after that. It also renames a work session left running overnight to today's
+-- weekday.
 hl.unbind("SUPER + ALT + RETURN")
-o.bind("SUPER + ALT + RETURN", "Tmux", 'omarchy-launch-terminal bash -c "tmux new"')
+o.bind("SUPER + ALT + RETURN", "Tmux", "omarchy-launch-terminal tmux-session-start")
 
 -- Applications --------------------------------------------------------------
 
