@@ -1,0 +1,13 @@
+[Unit]
+Description=Forward desktop notifications to phone via ntfy while unattended
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/omarchy-phone-notify-watch
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
