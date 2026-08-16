@@ -1,6 +1,7 @@
 private_dot_ssh/*
 private_dot_gnupg/*
 .secrets
+.secretgitconfig
 .cache/
 .local/
 Library/
@@ -15,6 +16,14 @@ Library/
 .config/spotify/
 .config/JetBrains/
 .config/nvim/lazy-lock.json
+
+# Holds ntfy credentials for omarchy-phone-notify. This repo is public.
+.config/omarchy/phone-notify.env
+
+# Backups left by the Omarchy 4 upgrade and by hand-porting its configs.
+.config/hypr/*.bak
+.config/hypr/*.stock.bak
+**/*.omarchy-upgrade-to-quattro.*.bak
 
 {{ if ne .chezmoi.os "linux" }}
 .config/hypr/
