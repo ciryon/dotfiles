@@ -64,8 +64,8 @@ hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 325E1", mod
 hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mode = "2560x1440@59.95", position = "4000x0", scale = 1, transform = 1 })
 {{- end }}
 
-{{- if eq (len $monitors) 1 }}
--- Default config: internal + whatever else (Hyprland auto placement)
+{{- if le (len $monitors) 2 }}
+-- Default config: internal + at most one external (Hyprland auto placement)
 
 hl.env("GDK_SCALE", "2")
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
