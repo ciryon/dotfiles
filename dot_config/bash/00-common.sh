@@ -1,28 +1,30 @@
+# Core environment. Nothing machine- or employer-specific belongs here.
+
+# Omarchy (Arch boxes: telchar) provides ll/la/ls, a prompt and much else —
+# which is exactly why the plain Ubuntu hosts had none of it. 41-linux.sh
+# fills that gap and defers to Omarchy when this flag is set.
+export DOTFILES_OMARCHY=0
 if [[ "$(uname -s)" == "Linux" ]] && [[ -r ~/.local/share/omarchy/default/bash/rc ]]; then
   source ~/.local/share/omarchy/default/bash/rc
+  export DOTFILES_OMARCHY=1
 fi
 
 set -o vi
 
-# Exports
-export DEVOPS_EVENTS_DIR="/home/ciryon/Coding/PulsSolutions/services/devops-events-service" # should move elsewhere
-export PULS_AI_TOOLS_DIR="$HOME/Coding/PulsSolutions/puls-ai-tools"
-export PATH="$HOME/Coding/PulsSolutions/scripts/bin:$PULS_AI_TOOLS_DIR/agent-personas/bin:$PATH:$HOME/bin:$HOME/.local/bin:$PULS_AI_TOOLS_DIR/tools"
+export PATH="$PATH:$HOME/bin:$HOME/.local/bin"
 
 case "$(uname -s)" in
 Darwin)
-  HOMEBREW_PREFIX="/opt/homebrew"
-  export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+  for p in /opt/homebrew /usr/local; do
+    [[ -d "$p/bin" ]] && export PATH="$p/bin:$p/sbin:$PATH"
+  done
   ;;
-esac
-
-case "$(uname -s)" in
 Linux)
-  export CAPACITOR_ANDROID_STUDIO_PATH="/usr/bin/android-studio"
+  [[ -x /usr/bin/android-studio ]] && export CAPACITOR_ANDROID_STUDIO_PATH="/usr/bin/android-studio"
   ;;
 esac
 
 export CLOUDFLARED_USERNAME=christian
 
-# Direnv
-# eval "$(direnv hook bash)"
+# uv / cargo shim, if installed
+[[ -r "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"

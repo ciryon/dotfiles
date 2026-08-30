@@ -25,6 +25,14 @@ Library/
 .config/hypr/*.stock.bak
 **/*.omarchy-upgrade-to-quattro.*.bak
 
-{{ if ne .chezmoi.os "linux" }}
+# GUI configs belong only on the desktop machines. A headless Ubuntu box would
+# otherwise get Hyprland, terminal-emulator and Omarchy files it cannot use —
+# and bindings.lua.tmpl needs data vars (basecamp_account, discord_channel)
+# that such a host has no chezmoi.toml to supply, which fails the whole apply.
+{{ if not (has .chezmoi.hostname (list "omarchy" "telchar")) }}
 .config/hypr/
+.config/alacritty/
+.config/ghostty/
+.config/omarchy/
+.config/systemd/user/omarchy-phone-notify.service
 {{ end }}

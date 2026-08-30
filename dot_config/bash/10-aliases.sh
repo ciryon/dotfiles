@@ -1,29 +1,40 @@
-# Aliases
-alias pu="cd ~/Coding/PulsSolutions"
+# Shared aliases. OS-specific ls/ll/la live in 40-mac.sh / 41-linux.sh, and
+# anything Puls-specific lives in 50-work.sh.
+#
+# Everything here is guarded: these files are applied to machines that do not
+# have the tool installed, and an alias to a missing binary only fails later,
+# at the confusing moment you use it.
+
+alias grep='grep --color=auto'
+command -v nvim >/dev/null && { alias vim=nvim; alias n=nvim; }
+command -v lazygit >/dev/null && alias lg=lazygit
+command -v rg      >/dev/null && alias ag=rg
+command -v qalc    >/dev/null && alias calc=qalc # awesome calculator
+command -v pino-pretty >/dev/null && \
+  alias pino-pretty='pino-pretty -i hostname,pid -S -t "SYS:yyyy-mm-dd HH:MM:ss"' # hide hostname,pid + single line + timestamp
 alias s="code .; yarn run dev"
-alias vim=nvim
-alias pino-pretty='pino-pretty -i hostname,pid -S -t "SYS:yyyy-mm-dd HH:MM:ss"' # hide hostname,pid + single line + timestamp
-alias lg=lazygit
-command -v rg >/dev/null && alias ag=rg
-alias logs=puls_aws_logs
-command -v qalc >/dev/null && alias calc=qalc # awesome calculator
+alias hurrah="echo \"Hurrah!\""
 
-cat() {
-  if [[ $# -eq 0 ]]; then
-    command bat --paging=never --style=plain --theme=gruvbox-dark 2>/dev/null
-    return
-  fi
-
-  for f in "$@"; do
-    if [[ -f "$f" ]] && file --mime-type -b "$f" | grep -q '^image/'; then
-      kitten icat "$f"
-    else
-      command bat --paging=never --style=plain --theme=gruvbox-dark 2>/dev/null "$f"
+# bat-backed cat, with inline images under kitty.
+if command -v bat >/dev/null 2>&1; then
+  cat() {
+    if [[ $# -eq 0 ]]; then
+      command bat --paging=never --style=plain --theme=gruvbox-dark
+      return
     fi
-  done
-}
 
+    for f in "$@"; do
+      if [[ -f "$f" ]] && command -v kitten >/dev/null 2>&1 \
+        && file --mime-type -b "$f" | grep -q '^image/'; then
+        kitten icat "$f"
+      else
+        command bat --paging=never --style=plain --theme=gruvbox-dark "$f"
+      fi
+    done
+  }
+fi
 
+# Text-to-speech. Needs ELEVENLABS_VOICE_ID / ELEVENLABS_API_KEY from ~/.secrets.
 say() {
   local text="$*"
 
@@ -36,16 +47,3 @@ say() {
       '{text: $text, model_id: "eleven_flash_v2_5"}')" \
     | mpv --no-video --really-quiet -
 }
-
-PULS_ROOT="$HOME/Coding/PulsSolutions"
-claude() {
-  if [[ "$PWD" == "$PULS_ROOT" || "$PWD" == "$PULS_ROOT"/* ]]; then
-    AWS_PROFILE=puls-agent command claude "$@"
-  else
-    command claude "$@"
-  fi
-}
-
-
-
-alias hurrah="echo \"Hurrah!\""

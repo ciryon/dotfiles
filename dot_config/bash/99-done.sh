@@ -1,3 +1,5 @@
+# Completions, history, and the login banner. Last file loaded.
+
 # carapace completions
 if command -v carapace >/dev/null 2>&1; then
   export CARAPACE_EXCLUDES='node,npx'
@@ -11,17 +13,19 @@ if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init bash --disable-up-arrow)"
 fi
 
-
-# A fun pic (only on host telchar)
-if [[ "$(hostname)" == "telchar" ]] && [[ -z "$PS1_SHOWN" ]]; then
+# Banner: only on a real interactive login, never over a non-interactive ssh
+# command — an agent running `ssh host cmd` should not have to parse this.
+if [[ -z "$PS1_SHOWN" && $- == *i* ]]; then
   PS1_SHOWN=1
 
-  if command -v chafa >/dev/null 2>&1 && [[ -n "$DROPBOX_PERSONAL" ]] \
-    && [[ -z "$SSH_CONNECTION" ]] && [[ "$TERM_PROGRAM" == "ghostty" ]]; then
-    chafa --format=kitty --scale=max --align=center \
-      "$DROPBOX_PERSONAL/Images/telchar.png"
-  else
-    cat << 'EOF'
+  # A fun pic (only on host telchar)
+  if [[ "$(hostname -s)" == "telchar" ]]; then
+    if command -v chafa >/dev/null 2>&1 && [[ -n "$DROPBOX_PERSONAL" ]] \
+      && [[ -z "$SSH_CONNECTION" ]] && [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+      chafa --format=kitty --scale=max --align=center \
+        "$DROPBOX_PERSONAL/Images/telchar.png"
+    else
+      cat << 'EOF_ART'
  _______ ______ _      _____ _    _          _____  
 |__   __|  ____| |    / ____| |  | |   /\   |  __ \ 
    | |  | |__  | |   | |    | |__| |  /  \  | |__) |
@@ -29,10 +33,9 @@ if [[ "$(hostname)" == "telchar" ]] && [[ -z "$PS1_SHOWN" ]]; then
    | |  | |____| |___| |____| |  | |/ ____ \| | \ \ 
    |_|  |______|______\_____|_|  |_/_/    \_\_|  \_\
 
-EOF
+EOF_ART
+    fi
   fi
 
+  echo "Remember: 'herdr' for tmux work session with AI, ctrl-o to jump to dir, gh dash - and yazi for file manager!"
 fi
-
-
-echo "Remember: 'herdr' for tmux work session with AI, ctrl-o to jump to dir, gh dash - and yazi for file manager!"
