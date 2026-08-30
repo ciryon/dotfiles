@@ -27,5 +27,14 @@ chk "no Puls awsnpm without tree"   '! type -t awsnpm >/dev/null'
 chk "no Puls dirs on PATH"          '[[ $PATH != *PulsSolutions* ]]'
 chk "ll defined"                    'type ll >/dev/null 2>&1'
 chk "LANG is a real locale"         'locale -a 2>/dev/null | grep -qix "${LANG//UTF-8/utf8}"'
-chk "no alias to missing binary"    'for a in $(alias -p | sed "s/^alias \([^=]*\)=.*/\1/"); do t=$(alias "$a" | sed "s/^alias [^=]*=.//;s/.$//" | awk "{print \$1}"); command -v "$t" >/dev/null || { echo "  $a -> $t"; false; break; }; done'
+bad_aliases() {
+  local a target
+  for a in $(alias -p | sed 's/^alias \([^=]*\)=.*/\1/'); do
+    target=$(alias "$a" | sed 's/^alias [^=]*=.//;s/.$//' | awk '{print $1}')
+    # skip aliases that wrap the command they are named after, e.g. grep
+    [ "$target" = "$a" ] && continue
+    command -v "$target" >/dev/null || echo "  $a -> $target"
+  done
+}
+chk "no alias to missing binary"    '[ -z "$(bad_aliases)" ] || { bad_aliases; false; }'
 exit $fail

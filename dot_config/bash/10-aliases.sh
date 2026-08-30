@@ -12,7 +12,7 @@ command -v rg      >/dev/null && alias ag=rg
 command -v qalc    >/dev/null && alias calc=qalc # awesome calculator
 command -v pino-pretty >/dev/null && \
   alias pino-pretty='pino-pretty -i hostname,pid -S -t "SYS:yyyy-mm-dd HH:MM:ss"' # hide hostname,pid + single line + timestamp
-alias s="code .; yarn run dev"
+command -v code >/dev/null && alias s="code .; yarn run dev"
 alias hurrah="echo \"Hurrah!\""
 
 # bat-backed cat, with inline images under kitty.
