@@ -9,16 +9,17 @@ src="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/dot_config/bash}"
 fake=$(mktemp -d); trap 'rm -rf "$fake"' EXIT
 export HOME="$fake" SSH_CONNECTION="" PS1_SHOWN=1
 export PATH=/usr/local/bin:/usr/bin:/bin   # baseline, so PATH checks see only what the chain adds
-# Point mise at the fake home too, or it warns about the real config being
-# untrusted under a HOME it does not recognise — noise that reads like a failure.
-export MISE_CONFIG_DIR="$fake/.config/mise" MISE_DATA_DIR="$fake/.local/share/mise"
 unset DOTFILES_OMARCHY
 
 # `type` only sees aliases when expansion is on, which it is not in a
 # non-interactive shell — and the chain's own `type ll` guard relies on it.
 shopt -s expand_aliases
 shopt -s nullglob
-for f in "$src"/*.sh; do . "$f"; done
+# Tools the chain activates (mise) chatter about the real ~/.config, which it
+# still finds despite the fake HOME. Hold that output back and show it only if
+# something actually fails, so a genuine error in a chain file is not lost.
+noise="$fake/source.log"
+for f in "$src"/*.sh; do . "$f"; done 2>"$noise"
 
 fail=0
 chk() { if eval "$2"; then echo "ok   $1"; else echo "FAIL $1"; fail=1; fi; }
@@ -40,4 +41,8 @@ bad_aliases() {
   done
 }
 chk "no alias to missing binary"    '[ -z "$(bad_aliases)" ] || { bad_aliases; false; }'
+if ((fail)) && [[ -s "$noise" ]]; then
+  echo "--- output while sourcing the chain:"
+  cat "$noise"
+fi
 exit $fail
