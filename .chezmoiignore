@@ -1,3 +1,6 @@
+# Repo tooling, not a dotfile.
+test-bash-chain.sh
+
 private_dot_ssh/*
 private_dot_gnupg/*
 .secrets
