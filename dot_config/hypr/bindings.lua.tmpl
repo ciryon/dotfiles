@@ -27,9 +27,11 @@ o.bind(
   { webapp = "https://discord.com/channels/{{ .discord_channel }}" }
 )
 
--- Was: Email. Prefer the aerc TUI over a webapp.
+-- Was: Email. The Omamail plugin window replaces the aerc TUI.
+-- The toggle target is `shell`, not the plugin id: the window is summoned by
+-- the shell, which is what loads the plugin in the first place.
 hl.unbind("SUPER + SHIFT + E")
-o.bind("SUPER + SHIFT + E", "Email", { tui = "aerc", focus = true })
+o.bind("SUPER + SHIFT + E", "Email", "omarchy shell shell toggle omamail '{}'")
 
 -- Was: New email
 hl.unbind("SUPER + SHIFT + ALT + E")

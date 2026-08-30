@@ -23,4 +23,29 @@ cat() {
   done
 }
 
+
+say() {
+  local text="$*"
+
+  curl -sS \
+    -X POST "https://api.elevenlabs.io/v1/text-to-speech/$ELEVENLABS_VOICE_ID?output_format=mp3_44100_128" \
+    -H "xi-api-key: $ELEVENLABS_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -n \
+      --arg text "$text" \
+      '{text: $text, model_id: "eleven_flash_v2_5"}')" \
+    | mpv --no-video --really-quiet -
+}
+
+PULS_ROOT="$HOME/Coding/PulsSolutions"
+claude() {
+  if [[ "$PWD" == "$PULS_ROOT" || "$PWD" == "$PULS_ROOT"/* ]]; then
+    AWS_PROFILE=puls-agent command claude "$@"
+  else
+    command claude "$@"
+  fi
+}
+
+
+
 alias hurrah="echo \"Hurrah!\""

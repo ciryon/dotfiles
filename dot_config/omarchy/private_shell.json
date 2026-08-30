@@ -7,10 +7,12 @@
           "id": "omarchy.indicators"
         },
         {
-          "format": "dddd HH:mm",
-          "formatAlt": "d MMMM 'W'ww yyyy",
           "id": "omarchy.clock",
-          "verticalFormat": "HH\n—\nmm"
+          "format": "ddd d MMM HH:mm",
+          "formatAlt": "d MMMM 'W'ww yyyy",
+          "verticalFormat": "HH\n—\nmm",
+          "birthYear": 0,
+          "lifeExpectancy": 90
         },
         {
           "id": "omarchy.keyboard-layout"
@@ -33,6 +35,9 @@
       "right": [
         {
           "id": "omarchy.tray"
+        },
+        {
+          "id": "omamail"
         },
         {
           "id": "omarchy.tailscale"
