@@ -9,6 +9,9 @@ src="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/dot_config/bash}"
 fake=$(mktemp -d); trap 'rm -rf "$fake"' EXIT
 export HOME="$fake" SSH_CONNECTION="" PS1_SHOWN=1
 export PATH=/usr/local/bin:/usr/bin:/bin   # baseline, so PATH checks see only what the chain adds
+# Point mise at the fake home too, or it warns about the real config being
+# untrusted under a HOME it does not recognise — noise that reads like a failure.
+export MISE_CONFIG_DIR="$fake/.config/mise" MISE_DATA_DIR="$fake/.local/share/mise"
 unset DOTFILES_OMARCHY
 
 # `type` only sees aliases when expansion is on, which it is not in a
