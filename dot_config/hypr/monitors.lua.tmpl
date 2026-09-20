@@ -15,8 +15,8 @@ hl.monitor({ output = "desc:Dell Inc. DELL P2419HC", mode = "1920x1080@60", posi
 -- Center - Philips 32"
 hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 325E1", mode = "2560x1440@59.95", position = "0x0", scale = 1 })
 
--- Right - Philips 27" rotated (portrait)
-hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mode = "2560x1440@59.95", position = "2560x-580", scale = 1, transform = 1 })
+-- Right - Philips 27" (landscape)
+hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mode = "2560x1440@59.95", position = "2560x0", scale = 1 })
 
 {{- else if eq .chezmoi.hostname "telchar" -}}
 -- Omarchy Framework 13" laptop
