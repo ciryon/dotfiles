@@ -46,14 +46,18 @@ hl.gesture({ fingers = 4, direction = "horizontal", action = "workspace" })
 
 -- Per-device overrides. The Keychron reports under two names depending on
 -- which of its interfaces is bound, so both get the same layout options.
--- Append altwin:swap_lalt_lwin here to swap Alt/Super on the Keychron.
+--
+-- altwin:swap_lalt_lwin is needed only where the Keychron is bound directly
+-- (the desktop). Through the KVM it enumerates as the hub's USB bridge,
+-- www.wch.cn-wch-uart-to-kb-ms_v1.8, which never matches these rules and so
+-- keeps the unswapped default -- which is what the laptop wants.
 hl.device({
   name = "keychron-keychron-k8-pro",
-  kb_options = "compose:caps,grp:alt_space_toggle",
+  kb_options = "compose:caps,grp:alt_space_toggle,altwin:swap_lalt_lwin",
 })
 hl.device({
   name = "keychron-keychron-k8-pro-keyboard",
-  kb_options = "compose:caps,grp:alt_space_toggle",
+  kb_options = "compose:caps,grp:alt_space_toggle,altwin:swap_lalt_lwin",
 })
 
 -- Apple Magic Trackpad: physical clicks only, no tap-to-click.
