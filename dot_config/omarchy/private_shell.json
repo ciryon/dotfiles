@@ -22,6 +22,9 @@
         },
         {
           "id": "omarchy.system-update"
+        },
+        {
+          "id": "io.github.ciryon.spotify-output"
         }
       ],
       "left": [
@@ -37,10 +40,13 @@
           "id": "omarchy.tray"
         },
         {
-          "id": "omamail"
+          "id": "io.github.ciryon.pullbar"
         },
         {
           "id": "omarchy.tailscale"
+        },
+        {
+          "id": "omamail"
         },
         {
           "id": "omarchy.dropbox"

@@ -1,10 +1,14 @@
 [settings]
 idiomatic_version_file_enable_tools = ["ruby", "node"]
 
+[settings.upgrade]
+auto_prune = false
+
 [tools]
 claude = "latest"
 codex = "latest"
-go = "latest"
-node = "lts"
+gemini = { version = "latest", allow_builds = ["@github/keytar", "node-pty"] }
+go = "1.25.1"
+node = "22.23.2"
 python = "3.12"
 ruby = "latest"
