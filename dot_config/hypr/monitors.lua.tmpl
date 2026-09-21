@@ -45,23 +45,22 @@ hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mod
 -- Custom config for 2 external displays + internal (not connecting left Dell)
 --
 -- Positions are explicit rather than "auto" so the three displays line up by
--- their vertical centres. The rotated 27" is 2560 logical px tall while the
--- 32" is only 1440, so leaving everything at y=0 makes the cursor jump
--- upwards when it crosses to the portrait screen.
+-- their vertical centres. Both externals are now landscape 2560x1440, so only
+-- the shorter internal panel needs an offset.
 --
 -- Logical sizes: internal 1440x960 (scale 2), centre 2560x1440, right
--- 1440x2560 (rotated). Centre offset = (2560 - own_height) / 2.
+-- 2560x1440. Offset = (1440 - own_height) / 2, so internal sits at y=240.
 
 hl.env("GDK_SCALE", "2")
 
 -- Internal display
-hl.monitor({ output = "desc:BOE NE135A1M-NY1", mode = "preferred", position = "0x800", scale = 2 })
+hl.monitor({ output = "desc:BOE NE135A1M-NY1", mode = "preferred", position = "0x240", scale = 2 })
 
 -- Center - Philips 32"
-hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 325E1", mode = "2560x1440@59.95", position = "1440x560", scale = 1 })
+hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 325E1", mode = "2560x1440@59.95", position = "1440x0", scale = 1 })
 
--- Right - Philips 27" rotated (portrait)
-hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mode = "2560x1440@59.95", position = "4000x0", scale = 1, transform = 1 })
+-- Right - Philips 27" (landscape)
+hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mode = "2560x1440@59.95", position = "4000x0", scale = 1 })
 {{- end }}
 
 {{- if le (len $monitors) 2 }}
