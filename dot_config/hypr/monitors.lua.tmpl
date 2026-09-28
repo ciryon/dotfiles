@@ -65,9 +65,23 @@ hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 275E1", mod
 
 {{- if le (len $monitors) 2 }}
 -- Default config: internal + at most one external (Hyprland auto placement)
+--
+-- Rule order matters: Hyprland applies the last matching rule, so the
+-- catch-all has to come first or it would override the specific rules.
+--
+-- The internal panel is matched by connector name: its `desc:` rule silently
+-- stopped matching on 2026-09-27 and the catch-all won. eDP-1 never moves.
+--
+-- Do not use `omarchy-hyprland-monitor-scaling` to change a scale: it writes
+-- the value into the catch-all rule, which then applies to every display.
 
-hl.env("GDK_SCALE", "2")
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+hl.env("GDK_SCALE", "1")
+
+-- Anything not named below (LG 40WT95UF at 5120x2160 lands here)
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1.25 })
+
+-- Internal display
+hl.monitor({ output = "eDP-1", mode = "preferred", position = "auto", scale = 2 })
 
 -- LG TV at office
 hl.monitor({ output = "desc:LG Electronics LG TV SSCR2", mode = "3840x2160@30", position = "auto", scale = 2 })
