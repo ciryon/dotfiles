@@ -22,9 +22,6 @@
         },
         {
           "id": "omarchy.system-update"
-        },
-        {
-          "id": "io.github.ciryon.spotify-output"
         }
       ],
       "left": [
@@ -46,19 +43,22 @@
           "id": "omarchy.tailscale"
         },
         {
-          "id": "omamail"
-        },
-        {
           "id": "omarchy.dropbox"
         },
         {
           "id": "omarchy.agents"
         },
         {
+          "id": "37signals.basecamp"
+        },
+        {
           "id": "omarchy.bluetooth"
         },
         {
           "id": "omarchy.network"
+        },
+        {
+          "id": "io.github.ciryon.spotify-output"
         },
         {
           "id": "omarchy.audio"
@@ -75,9 +75,22 @@
     "transparent": false
   },
   "idle": {
-    "lock": 300,
-    "screensaver": 150
+    "lock": 600,
+    "screensaver": 300
   },
-  "plugins": [],
-  "version": 1
+  "plugins": [
+    {
+      "id": "ciryon.lock"
+    },
+    {
+      "id": "typecraft.oma-cast"
+    }
+  ],
+  "version": 1,
+  "disabledPlugins": [
+    "omarchy.lock"
+  ],
+  "cloneSourceRestores": [
+    "ciryon.lock"
+  ]
 }

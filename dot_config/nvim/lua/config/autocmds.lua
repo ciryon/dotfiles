@@ -6,3 +6,6 @@
 --
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+
+-- Don't enable spell checking in text/markdown/gitcommit buffers
+vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")

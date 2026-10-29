@@ -27,3 +27,12 @@ require("default.hypr.toggles")
 
 -- Add any other personal Hyprland configuration below.
 -- o.window("qemu", { workspace = "5" })
+
+require("hypr.oma-cast")
+
+-- Basecamp webapp: floating, centered, 50% x 40% of monitor
+o.window("chrome-3.basecamp.com__{{ .basecamp_account }}-Default", {
+  float = true,
+  center = true,
+  size = { "(monitor_w*0.5)", "(monitor_h*0.4)" },
+})

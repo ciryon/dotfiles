@@ -27,11 +27,9 @@ o.bind(
   { webapp = "https://discord.com/channels/{{ .discord_channel }}" }
 )
 
--- Was: Email. The Omamail plugin window replaces the aerc TUI.
--- The toggle target is `shell`, not the plugin id: the window is summoned by
--- the shell, which is what loads the plugin in the first place.
-hl.unbind("SUPER + SHIFT + E")
-o.bind("SUPER + SHIFT + E", "Email", "omarchy shell shell toggle omamail '{}'")
+-- Was: Nautilus file manager. Now replaced by Strata
+hl.unbind("SUPER + SHIFT + F")
+o.bind("SUPER + SHIFT + F", "Strata file manager", "strata")
 
 -- Was: New email
 hl.unbind("SUPER + SHIFT + ALT + E")
@@ -41,6 +39,10 @@ o.bind("SUPER + SHIFT + ALT + E", "Gmail", { webapp = "https://gmail.com" })
 hl.unbind("SUPER + SHIFT + C")
 o.bind("SUPER + SHIFT + C", "Basecamp", { webapp = "https://3.basecamp.com/{{ .basecamp_account }}" })
 
+-- Was: Calendar (HEY email, unused)
+hl.unbind("SUPER + SHIFT + E")
+o.bind("SUPER + SHIFT + E", "Email", { webapp = "https://gmail.com" })
+--
 -- Was: Signal
 hl.unbind("SUPER + SHIFT + G")
 o.bind("SUPER + SHIFT + G", "GitHub", {
@@ -60,8 +62,8 @@ o.bind(
   "SUPER + SHIFT + Y",
   "YouTube",
   'uwsm-app -- /usr/bin/chromium --user-data-dir="'
-    .. home
-    .. '/.config/chromium-personal" --new-window "https://youtube.com/"'
+  .. home
+  .. '/.config/chromium-personal" --new-window "https://youtube.com/"'
 )
 
 -- Activity monitor. Omarchy also binds this to SUPER + CTRL + T.

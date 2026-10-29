@@ -36,6 +36,4 @@ if [[ -z "$PS1_SHOWN" && $- == *i* ]]; then
 EOF_ART
     fi
   fi
-
-  echo "Remember: 'herdr' for tmux work session with AI, ctrl-o to jump to dir, gh dash - and yazi for file manager!"
 fi
