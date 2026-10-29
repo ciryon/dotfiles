@@ -30,9 +30,8 @@ require("default.hypr.toggles")
 
 require("hypr.oma-cast")
 
--- Basecamp webapp: floating, centered, 50% x 40% of monitor
+-- Basecamp webapp: pseudotiled (stays in layout, not on top), taller than wide
 o.window("chrome-3.basecamp.com__{{ .basecamp_account }}-Default", {
-  float = true,
-  center = true,
-  size = { "(monitor_w*0.5)", "(monitor_h*0.4)" },
+  pseudo = true,
+  size = { "(monitor_h*0.5)", "(monitor_h*0.8)" },
 })
