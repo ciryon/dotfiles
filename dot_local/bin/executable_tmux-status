@@ -35,6 +35,25 @@ summarize() {
   printf '%s' "$out"
 }
 
+# True when this process really is running inside the pane that $TMUX_PANE
+# names. $TMUX and $TMUX_PANE are inherited by every child process, so a
+# background agent started from a tmux shell — a daemon, a scheduled job, a
+# detached session — carries them around long after it has left the terminal,
+# and would otherwise rewrite the status of a window it has nothing to do with.
+# Process ancestry does not lie: the pane's own process must be above us.
+in_tmux_pane() {
+  local pane="$1" pane_pid pid depth=0
+  pane_pid="$(tmux display-message -p -t "$pane" '#{pane_pid}' 2>/dev/null)"
+  [[ -n "$pane_pid" ]] || return 1
+  pid=$$
+  while [[ -n "$pid" && "$pid" -gt 1 && $depth -lt 40 ]]; do
+    [[ "$pid" == "$pane_pid" ]] && return 0
+    pid="$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d '[:space:]')"
+    depth=$((depth + 1))
+  done
+  return 1
+}
+
 # Everything up to the first sentence end, or the whole text if there is none.
 first_sentence() {
   local text="$1" shortest="$1" candidate sep
@@ -48,7 +67,7 @@ first_sentence() {
 }
 
 if [[ "${1:-}" == "--clear" ]]; then
-  [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || exit 0
+  [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] && in_tmux_pane "$TMUX_PANE" || exit 0
   tmux set-option -wu -t "$TMUX_PANE" "$OPTION"
   exit 0
 fi
@@ -64,6 +83,7 @@ if [[ -z "$status" && ! -t 0 ]]; then
 fi
 
 [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || exit 0
+in_tmux_pane "${TMUX_PANE}" || exit 0
 [[ -n "${status// /}" ]] || exit 0
 
 # Only the opening paragraph: what follows is usually a list or detail that
