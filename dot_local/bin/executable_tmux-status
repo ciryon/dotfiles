@@ -66,6 +66,33 @@ first_sentence() {
   printf '%s' "$shortest"
 }
 
+usage() {
+  cat <<'USAGE'
+tmux-status — record a one-line status on the current tmux window.
+
+  tmux-status "waiting on CI"   set it
+  tmux-status --clear           remove it
+  <hook JSON> | tmux-status     take the first sentences of a turn's last message
+
+Writes the window option @description's quieter sibling, @status, on the window
+this process is really running in. Does nothing outside tmux.
+USAGE
+}
+
+case "${1:-}" in
+  -h | --help)
+    usage
+    exit 0
+    ;;
+  --clear) ;;
+  -*)
+    # Without this, a mistyped flag becomes the status text.
+    echo "tmux-status: unknown option: $1" >&2
+    usage >&2
+    exit 64
+    ;;
+esac
+
 if [[ "${1:-}" == "--clear" ]]; then
   [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] && in_tmux_pane "$TMUX_PANE" || exit 0
   tmux set-option -wu -t "$TMUX_PANE" "$OPTION"
