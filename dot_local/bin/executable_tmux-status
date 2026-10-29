@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+# tmux-status — record a one-line status on the current tmux window, where
+# tmux-dashboard will show it.
+#
+#   tmux-status "waiting on CI"      set it by hand
+#   tmux-status --clear              remove it
+#   <hook JSON> | tmux-status        as a Claude Code Stop hook: uses the first
+#                                    sentence of the turn's final message
+#
+# It writes the window option @status, which the dashboard shows only when the
+# window has no @description of your own, so a note you wrote is never
+# overwritten. Outside tmux, or with nothing to say, it does nothing at all:
+# a hook should never be in the way.
+
+set -uo pipefail
+
+readonly OPTION="@status"
+readonly MAX_CHARS=140
+# Below this, a "sentence" is too terse to be worth showing on its own.
+readonly MIN_SENTENCE=20
+
+# Everything up to the first sentence end, or the whole text if there is none.
+first_sentence() {
+  local text="$1" shortest="$1" candidate sep
+  for sep in '. ' '! ' '? '; do
+    candidate="${text%%"$sep"*}"
+    if [[ "$candidate" != "$text" && ${#candidate} -lt ${#shortest} ]]; then
+      shortest="${candidate}${sep:0:1}"
+    fi
+  done
+  printf '%s' "$shortest"
+}
+
+if [[ "${1:-}" == "--clear" ]]; then
+  [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || exit 0
+  tmux set-option -wu -t "$TMUX_PANE" "$OPTION"
+  exit 0
+fi
+
+status="$*"
+
+# No argument: read a hook payload from stdin and use the turn's last message.
+if [[ -z "$status" && ! -t 0 ]]; then
+  payload="$(cat)"
+  if command -v jq >/dev/null 2>&1; then
+    status="$(jq -r '.last_assistant_message // empty' <<<"$payload" 2>/dev/null)"
+  fi
+fi
+
+[[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || exit 0
+[[ -n "${status// /}" ]] || exit 0
+
+# One line, without markdown decoration: the card shows plain text.
+status="${status//[$'\n\r\t']/ }"
+status="$(sed -E 's/```[^`]*```/ /g; s/`([^`]*)`/\1/g; s/\*\*([^*]*)\*\*/\1/g; s/^[[:space:]]*[-*][[:space:]]+//; s/  +/ /g; s/^ //; s/ $//' <<<"$status")"
+
+sentence="$(first_sentence "$status")"
+[[ ${#sentence} -ge $MIN_SENTENCE ]] && status="$sentence"
+[[ ${#status} -gt $MAX_CHARS ]] && status="${status:0:MAX_CHARS}…"
+
+[[ -n "${status// /}" ]] || exit 0
+tmux set-option -w -t "$TMUX_PANE" "$OPTION" "$status"

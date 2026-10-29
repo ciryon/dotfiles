@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+#
+# tmux-describe — prompt for a window's dashboard description.
+#
+#   tmux-describe new  <pane-id>   create a window, then ask for name + description
+#   tmux-describe edit <pane-id>   edit the description of that pane's window
+#
+# Meant for tmux key bindings, which pass #{pane_id}:
+#
+#   bind C run-shell -b "~/.local/bin/tmux-describe new '#{pane_id}'"
+#   bind D run-shell -b "~/.local/bin/tmux-describe edit '#{pane_id}'"
+#
+# The window is always addressed by its id, captured before the prompt opens.
+# A popup is not "in" the window it is about, so an unqualified rename-window
+# or set-option would land on whichever window the session happens to have
+# selected.
+
+set -uo pipefail
+
+readonly OPTION="@description"
+self="$(readlink -f "$0")"
+
+# Asks tmux about a pane or window, quietly.
+ask() {
+  tmux display-message -p -t "$1" "$2" 2>/dev/null
+}
+
+# Builds a shell-safe command line for display-popup -E.
+popup_command() {
+  printf '%q %q %q' "$self" "$1" "$2"
+}
+
+case "${1:-edit}" in
+  new)
+    pane="${2:-${TMUX_PANE:-}}"
+    cwd="$(ask "$pane" '#{pane_current_path}')"
+    window="$(tmux new-window -P -F '#{window_id}' -c "${cwd:-$HOME}")" || exit 1
+    tmux display-popup -w 64 -h 7 -E "$(popup_command prompt-new "$window")"
+    ;;
+
+  edit)
+    pane="${2:-${TMUX_PANE:-}}"
+    window="$(ask "$pane" '#{window_id}')"
+    [[ -n "$window" ]] || exit 1
+    tmux display-popup -w 64 -h 5 -E "$(popup_command prompt-edit "$window")"
+    ;;
+
+  prompt-new)
+    window="$2"
+    name="$(ask "$window" '#{window_name}')"
+    read -r -e -i "$name" -p "Window name: " name
+    read -r -e -p "Description:  " description
+    [[ -n "${name// /}" ]] && tmux rename-window -t "$window" "$name"
+    [[ -n "${description// /}" ]] && tmux set-option -w -t "$window" "$OPTION" "$description"
+    ;;
+
+  prompt-edit)
+    window="$2"
+    current="$(tmux show-options -wqv -t "$window" "$OPTION" 2>/dev/null)"
+    read -r -e -i "$current" -p "Description: " description
+    if [[ -n "${description// /}" ]]; then
+      tmux set-option -w -t "$window" "$OPTION" "$description"
+    else
+      # Submitting an empty line clears the description.
+      tmux set-option -wu -t "$window" "$OPTION"
+    fi
+    ;;
+
+  *)
+    echo "usage: tmux-describe {new|edit} [pane-id]" >&2
+    exit 64
+    ;;
+esac

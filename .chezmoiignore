@@ -6,7 +6,17 @@ private_dot_gnupg/*
 .secrets
 .secretgitconfig
 .cache/
-.local/
+# ~/.local is state and caches, except the helper scripts tmux key bindings
+# call: those have to travel with the bindings that reference them, or a
+# machine without them gets a binding that silently does nothing (which is how
+# Prefix+C-j broke on anduril). A directory cannot be un-ignored once ignored,
+# hence the step-by-step pattern.
+.local/*
+!.local/bin
+.local/bin/*
+!.local/bin/tmux-describe
+!.local/bin/tmux-status
+!.local/bin/tmux-zoxide-cd.sh
 Library/
 .config/1Password/
 .config/github-copilot/
