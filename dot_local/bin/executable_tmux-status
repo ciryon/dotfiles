@@ -16,9 +16,24 @@
 set -uo pipefail
 
 readonly OPTION="@status"
-readonly MAX_CHARS=140
-# Below this, a "sentence" is too terse to be worth showing on its own.
-readonly MIN_SENTENCE=20
+readonly MAX_CHARS=100
+# A status shorter than this says too little to stand on its own, so whole
+# sentences are added until it clears the bar.
+readonly MIN_SUMMARY=40
+
+# Whole sentences from the front of the text, until there are enough
+# characters to be worth reading. "Done." alone is not a status; "Done. The
+# parser now handles tabs." is.
+summarize() {
+  local rest="$1" out="" sentence
+  while [[ -n "$rest" && ${#out} -lt $MIN_SUMMARY ]]; do
+    sentence="$(first_sentence "$rest")"
+    out+="${out:+ }${sentence}"
+    rest="${rest:${#sentence}}"
+    rest="${rest# }"
+  done
+  printf '%s' "$out"
+}
 
 # Everything up to the first sentence end, or the whole text if there is none.
 first_sentence() {
@@ -51,13 +66,21 @@ fi
 [[ -n "${TMUX:-}" && -n "${TMUX_PANE:-}" ]] || exit 0
 [[ -n "${status// /}" ]] || exit 0
 
+# Only the opening paragraph: what follows is usually a list or detail that
+# reads as noise once flattened onto one line.
+status="${status%%$'\n\n'*}"
+
 # One line, without markdown decoration: the card shows plain text.
 status="${status//[$'\n\r\t']/ }"
 status="$(sed -E 's/```[^`]*```/ /g; s/`([^`]*)`/\1/g; s/\*\*([^*]*)\*\*/\1/g; s/^[[:space:]]*[-*][[:space:]]+//; s/  +/ /g; s/^ //; s/ $//' <<<"$status")"
 
-sentence="$(first_sentence "$status")"
-[[ ${#sentence} -ge $MIN_SENTENCE ]] && status="$sentence"
-[[ ${#status} -gt $MAX_CHARS ]] && status="${status:0:MAX_CHARS}…"
+status="$(summarize "$status")"
+if [[ ${#status} -gt $MAX_CHARS ]]; then
+  # Cut on a word boundary rather than mid-word.
+  status="${status:0:MAX_CHARS}"
+  [[ "$status" == *" "* ]] && status="${status% *}"
+  status="${status%[[:punct:]]}…"
+fi
 
 [[ -n "${status// /}" ]] || exit 0
 tmux set-option -w -t "$TMUX_PANE" "$OPTION" "$status"
