@@ -28,3 +28,4 @@ export CLOUDFLARED_USERNAME=christian
 
 # uv / cargo shim, if installed
 [[ -r "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
+[[ -r "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"

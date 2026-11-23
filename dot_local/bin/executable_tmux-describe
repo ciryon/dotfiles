@@ -47,11 +47,15 @@ case "${1:-edit}" in
 
   prompt-new)
     window="$2"
-    name="$(ask "$window" '#{window_name}')"
-    read -r -e -i "$name" -p "Window name: " name
+    read -r -e -p "Window name: " name
     read -r -e -p "Description:  " description
-    [[ -n "${name// /}" ]] && tmux rename-window -t "$window" "$name"
-    [[ -n "${description// /}" ]] && tmux set-option -w -t "$window" "$OPTION" "$description"
+    # Blank answers keep tmux's automatic name and leave no description.
+    if [[ -n "${name// /}" ]]; then
+      tmux rename-window -t "$window" "$name"
+    fi
+    if [[ -n "${description// /}" ]]; then
+      tmux set-option -w -t "$window" "$OPTION" "$description"
+    fi
     ;;
 
   prompt-edit)
