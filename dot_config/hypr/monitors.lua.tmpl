@@ -30,6 +30,13 @@ hl.monitor({ output = "desc:LG Electronics LG TV SSCR2", mode = "3840x2160@30", 
 -- Explicit position: "auto" put it left of the laptop.
 hl.monitor({ output = "desc:Philips Consumer Electronics Company PHL 325E1", mode = "preferred", position = "1440x0", scale = 1 })
 
+{{- else if eq .chezmoi.hostname "omarchy" }}
+-- Gaming PC on the LG 40WT95UF at home. Same 1.25 as telchar's catch-all so
+-- the desktop looks the same whichever machine drives the display.
+
+hl.env("GDK_SCALE", "1")
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1.25 })
+
 {{- else }}
 -- Generic fallback for non-configured machines
 
