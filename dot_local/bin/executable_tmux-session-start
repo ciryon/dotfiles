@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# Start a fresh tmux session with a name that says what it is for, and attach.
+#
+# First terminal of the day gets the work session, "Puls <weekday>". Once that
+# exists, further terminals get "Personal", "Personal 2", "Personal 3", ...
+#
+# A work session left running overnight is renamed to today's weekday first, so
+# yesterday's "Puls Monday" becomes "Puls Tuesday" instead of being manually
+# renamed or blocking today's session from being created.
+#
+# Always creates a NEW session - it never reattaches to an existing one, unlike
+# Omarchy's default `tmux attach || tmux new -s Work`.
+#
+# Bound to SUPER + ALT + RETURN in ~/.config/hypr/bindings.lua.
+
+set -euo pipefail
+
+# tmux target names are PREFIX matches by default, so `-t Personal` would happily
+# match "Personal 2" and the loop below would never terminate correctly. The
+# leading "=" forces an exact match.
+session_exists() { tmux has-session -t "=$1" 2>/dev/null; }
+
+# Force C locale so the weekday is "Monday" and not the system language's
+# version of it - the session name should be stable regardless of locale.
+weekday=$(LC_ALL=C date +%A)
+work_session="Puls $weekday"
+
+WEEKDAY_RE='^Puls (Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$'
+
+# No server yet (first terminal after boot): restore the tmux-resurrect snapshot
+# BEFORE the rename logic below, so yesterday's restored work session gets
+# renamed instead of showing up next to a fresh one. Resurrect restores into a
+# server with one pane and then kills the placeholder session "0" itself.
+# run-shell (without -b) blocks until the restore is done.
+restored=
+if ! tmux list-sessions &>/dev/null; then
+  restored=1
+  tmux new-session -d -s 0
+  restore=$(tmux show -gqv @resurrect-restore-script-path)
+  if [[ -n $restore ]]; then
+    tmux run-shell "$restore"
+  fi
+fi
+
+# Yesterday's work session, if it is still around. Sorted by last-attached so
+# the one actually being used wins if somehow several exist. Freshly restored
+# sessions were never attached and tie at 0, so the one with most windows wins.
+stale_work_session() {
+  tmux list-sessions -F '#{session_last_attached} #{session_windows} #{session_name}' 2>/dev/null \
+    | sort -k1,1rn -k2,2rn \
+    | cut -d' ' -f3- \
+    | grep -E "$WEEKDAY_RE" \
+    | grep -vxF "$work_session" \
+    | head -1
+}
+
+if ! session_exists "$work_session"; then
+  stale=$(stale_work_session || true)
+  if [[ -n ${stale:-} ]]; then
+    tmux rename-session -t "=$stale" "$work_session"
+  fi
+fi
+
+# Today's work session already exists, so any other weekday session is left over
+# from an earlier day and cannot be renamed into it. Drop the ones nobody is
+# using; an attached one is live work and is left alone.
+if session_exists "$work_session"; then
+  while read -r attached name; do
+    [[ $attached == 0 ]] || continue
+    [[ $name != "$work_session" ]] || continue
+    [[ $name =~ $WEEKDAY_RE ]] || continue
+    tmux kill-session -t "=$name"
+  done < <(tmux list-sessions -F '#{session_attached} #{session_name}' 2>/dev/null || true)
+fi
+
+# Just restored after boot: this is the first terminal of the day, so it goes
+# into the restored work session rather than a new personal one.
+if [[ -n $restored ]] && session_exists "$work_session"; then
+  exec tmux attach-session -t "=$work_session"
+fi
+
+if ! session_exists "$work_session"; then
+  name="$work_session"
+else
+  # Today's work session is taken, so this is a personal one. Find the first
+  # free name in the Personal series.
+  name="Personal"
+  n=2
+  while session_exists "$name"; do
+    name="Personal $n"
+    n=$((n + 1))
+  done
+fi
+
+exec tmux new-session -s "$name"

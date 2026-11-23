@@ -1,3 +1,4 @@
+local secrets = require("hypr.secrets")
 -- Personal keybindings.
 --
 -- Omarchy's defaults are loaded before this file, so any key that Omarchy
@@ -24,7 +25,7 @@ hl.unbind("SUPER + SHIFT + D")
 o.bind(
   "SUPER + SHIFT + D",
   "Discord",
-  { webapp = "https://discord.com/channels/{{ .discord_channel }}" }
+  { webapp = "https://discord.com/channels/" .. secrets.discord_channel }
 )
 
 -- Was: Nautilus file manager. Now replaced by Strata
@@ -37,7 +38,7 @@ o.bind("SUPER + SHIFT + ALT + E", "Gmail", { webapp = "https://gmail.com" })
 
 -- Was: Calendar (HEY calendar, unused)
 hl.unbind("SUPER + SHIFT + C")
-o.bind("SUPER + SHIFT + C", "Basecamp", { webapp = "https://3.basecamp.com/{{ .basecamp_account }}" })
+o.bind("SUPER + SHIFT + C", "Basecamp", { webapp = "https://3.basecamp.com/" .. secrets.basecamp_account })
 
 -- Was: Calendar (HEY email, unused)
 hl.unbind("SUPER + SHIFT + E")

@@ -17,6 +17,7 @@ private_dot_gnupg/*
 !.local/bin/tmux-describe
 !.local/bin/tmux-status
 !.local/bin/tmux-zoxide-cd.sh
+!.local/bin/tmux-session-start
 Library/
 .config/1Password/
 .config/github-copilot/
@@ -40,7 +41,7 @@ Library/
 
 # GUI configs belong only on the desktop machines. A headless Ubuntu box would
 # otherwise get Hyprland, terminal-emulator and Omarchy files it cannot use —
-# and bindings.lua.tmpl needs data vars (basecamp_account, discord_channel)
+# and hypr/secrets.lua.tmpl needs data vars (basecamp_account, discord_channel)
 # that such a host has no chezmoi.toml to supply, which fails the whole apply.
 {{ if not (has .chezmoi.hostname (list "omarchy" "telchar")) }}
 .config/hypr/

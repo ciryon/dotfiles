@@ -31,7 +31,8 @@ require("default.hypr.toggles")
 require("hypr.oma-cast")
 
 -- Basecamp webapp: pseudotiled (stays in layout, not on top), taller than wide
-o.window("chrome-3.basecamp.com__{{ .basecamp_account }}-Default", {
+local secrets = require("hypr.secrets")
+o.window("chrome-3.basecamp.com__" .. secrets.basecamp_account .. "-Default", {
   pseudo = true,
   size = { "(monitor_h*0.5)", "(monitor_h*0.8)" },
 })
