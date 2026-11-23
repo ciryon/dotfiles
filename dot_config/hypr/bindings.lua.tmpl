@@ -75,3 +75,10 @@ o.bind("SUPER + SHIFT + T", "Activity", { tui = "btop" })
 -- works unmodified.
 o.bind("SUPER + mouse:275", "Previous workspace", hl.dsp.focus({ workspace = "e-1" }))
 o.bind("SUPER + mouse:276", "Next workspace", hl.dsp.focus({ workspace = "e+1" }))
+
+-- Dictation keys from before Alt + Space and Right Alt became the defaults.
+-- Remove these lines to give the keys back to applications.
+if o.dictation_installed and o.dictation_installed() then
+  o.bind("SUPER + CTRL + X", "Toggle dictation", "omarchy-dictation toggle")
+  o.bind_hold("F9", "Start dictation (push-to-talk)", "omarchy-dictation start", "Stop dictation (push-to-talk)", "omarchy-dictation stop")
+end

@@ -27,7 +27,7 @@ awsnpm() {
   local host="$domain-$owner.d.codeartifact.$region.amazonaws.com"
 
   aws codeartifact login --tool npm --domain "$domain" --domain-owner "$owner" \
-    --repository "$repo" --region "$region"
+    --repository "$repo" --region "$region" --namespace @puls-solutions
 
   npm config set @puls-solutions:registry "https://$host/npm/$repo/"
 

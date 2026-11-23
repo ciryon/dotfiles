@@ -35,3 +35,15 @@ o.window("chrome-3.basecamp.com__{{ .basecamp_account }}-Default", {
   pseudo = true,
   size = { "(monitor_h*0.5)", "(monitor_h*0.8)" },
 })
+
+-- Scratchpad: seed ghostty + tmux-dashboard first time Super+S opens it.
+local SCRATCH = "special:scratchpad"
+hl.on("workspace.created", function(ws)
+  if ws and ws.name == SCRATCH and ws.is_empty then
+    hl.exec_cmd(
+      o.launch("ghostty --class=com.ciryon.scratchpad --font-size=16 -e tmux-dashboard"),
+      { workspace = SCRATCH .. " silent" }
+    )
+  end
+end)
+o.window("com.ciryon.scratchpad", { float = true, center = true, size = { "(monitor_w*0.6)", "(monitor_h*0.4)" } })

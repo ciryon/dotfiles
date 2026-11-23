@@ -1,11 +1,7 @@
 {
   "bar": {
-    "centerAnchor": "omarchy.clock",
     "layout": {
       "center": [
-        {
-          "id": "omarchy.indicators"
-        },
         {
           "id": "omarchy.clock",
           "format": "ddd d MMM HH:mm",
@@ -13,15 +9,6 @@
           "verticalFormat": "HH\n—\nmm",
           "birthYear": 0,
           "lifeExpectancy": 90
-        },
-        {
-          "id": "omarchy.keyboard-layout"
-        },
-        {
-          "id": "omarchy.weather"
-        },
-        {
-          "id": "omarchy.system-update"
         }
       ],
       "left": [
@@ -35,6 +22,9 @@
       "right": [
         {
           "id": "omarchy.tray"
+        },
+        {
+          "id": "omarchy.keyboard-layout"
         },
         {
           "id": "io.github.ciryon.pullbar"
@@ -68,6 +58,51 @@
         },
         {
           "id": "omarchy.power"
+        }
+      ],
+      "centerBegin": [
+        {
+          "id": "omarchy.indicators"
+        }
+      ],
+      "centerEnd": [
+        {
+          "id": "omarchy.elsewhen",
+          "cities": [
+            {
+              "name": "Copenhagen",
+              "zone": "Europe/Copenhagen"
+            },
+            {
+              "name": "Dubai",
+              "zone": "Asia/Dubai"
+            },
+            {
+              "name": "Tokyo",
+              "zone": "Asia/Tokyo"
+            },
+            {
+              "name": "Los Angeles",
+              "zone": "America/Los_Angeles"
+            },
+            {
+              "name": "New York",
+              "zone": "America/New_York"
+            }
+          ],
+          "here": {
+            "name": "Helsingborg",
+            "zone": "Europe/Stockholm",
+            "lat": 56.04673,
+            "lon": 12.69437,
+            "region": "Skåne County, SE"
+          }
+        },
+        {
+          "id": "omarchy.weather"
+        },
+        {
+          "id": "omarchy.system-update"
         }
       ]
     },

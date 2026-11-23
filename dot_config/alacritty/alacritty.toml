@@ -7,9 +7,9 @@ import = [ "~/.local/state/omarchy/current/theme/alacritty.toml" ]
 TERM = "xterm-256color"
 
 [font]
-normal = { family = "JetBrainsMonoNL Nerd Font Mono" }
-bold = { family = "JetBrainsMonoNL Nerd Font Mono" }
-italic = { family = "JetBrainsMonoNL Nerd Font Mono" }
+normal = { family = "JetBrainsMono Nerd Font" }
+bold = { family = "JetBrainsMono Nerd Font" }
+italic = { family = "JetBrainsMono Nerd Font" }
 size = 10
 
 [window]
